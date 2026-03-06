@@ -1,0 +1,139 @@
+{% extends 'buddybasket/base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - BuddyBasket{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Image -->
+<section class="contact-hero"
+    style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://media.istockphoto.com/id/616091828/photo/shopping-woman-texting-on-her-phone.jpg?s=612x612&w=0&k=20&c=hiWhQcZIrUhrdiFdtCMM1gtFHotSdekEWvp_ipahoLg='); background-size: cover; background-position: center; height: 400px; display: flex; align-items: center; justify-content: center;">
+    <div class="container text-center text-white">
+        <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown">Get in Touch</h1>
+        <p class="lead fs-3 mb-4 animate__animated animate__fadeInUp">We'd love to hear from you! 😊</p>
+        <div class="d-flex justify-content-center gap-3 animate__animated animate__fadeInUp animate__delay-1s">
+            <span class="hero-badge bg-primary px-4 py-2 rounded-pill"><i class="fas fa-phone-alt me-2"></i> 24/7
+                Support</span>
+            <span class="hero-badge bg-primary px-4 py-2 rounded-pill"><i class="fas fa-clock me-2"></i> Fast
+                Response</span>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Contact Information -->
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h3 class="fw-bold mb-4">Get in Touch</h3>
+
+                <div class="contact-info mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-box me-3"
+                            style="width: 50px; height: 50px; background: rgba(255,107,74,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-map-marker-alt" style="color: var(--primary);"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Visit Us</h6>
+                            <p class="text-muted mb-0">123 Shopping Street, Chennai, India - 600001</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-box me-3"
+                            style="width: 50px; height: 50px; background: rgba(255,107,74,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-phone" style="color: var(--primary);"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Call Us</h6>
+                            <p class="text-muted mb-0">+91 98765 43210</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-box me-3"
+                            style="width: 50px; height: 50px; background: rgba(255,107,74,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-envelope" style="color: var(--primary);"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Email Us</h6>
+                            <p class="text-muted mb-0">hello@buddybasket.com</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box me-3"
+                            style="width: 50px; height: 50px; background: rgba(255,107,74,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-clock" style="color: var(--primary);"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Working Hours</h6>
+                            <p class="text-muted mb-0">Mon - Sat: 9:00 AM - 8:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media -->
+                <h5 class="mb-3">Follow Us</h5>
+                <div class="social-links">
+                    <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-8">
+                <div class="contact-form bg-light p-5 rounded-3">
+                    <h3 class="fw-bold mb-4">Send us a Message 💬</h3>
+
+                    <form method="post" action="#" id="contactForm">
+                        {% csrf_token %}
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text" class="form-control form-control-lg" id="name" name="name" required
+                                    placeholder="Enter your name">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control form-control-lg" id="email" name="email"
+                                    required placeholder="Enter your email">
+                            </div>
+                            <div class="col-12">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" class="form-control form-control-lg" id="subject" name="subject"
+                                    required placeholder="What is this about?">
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control form-control-lg" id="message" name="message" rows="5"
+                                    required placeholder="Tell us how we can help..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    Send Message <i class="fas fa-paper-plane ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="map py-5 bg-light">
+    <div class="container">
+        <h3 class="text-center fw-bold mb-4">Find Us Here 📍</h3>
+        <div class="ratio ratio-21x9">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248756.11670860233!2d80.04419672556183!3d13.047487785996597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1698765432100!5m2!1sen!2sin"
+                style="border:0;" allowfullscreen="" loading="lazy" class="rounded-3 shadow">
+            </iframe>
+        </div>
+    </div>
+</section>
+{% endblock %}

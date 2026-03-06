@@ -1,0 +1,136 @@
+{% extends 'buddybasket/base.html' %}
+{% load static %}
+
+{% block title %}My Wishlist - BuddyBasket{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">My Wishlist</h1>
+            <p class="lead text-muted">Items you've saved for later</p>
+        </div>
+    </div>
+
+    {% if wishlist_items %}
+    <div class="row">
+        {% for item in wishlist_items %}
+        <!-- Wishlist Item Card -->
+        <div class="col-md-3 mb-4">
+            <div class="product-card h-100 border-0 shadow-sm">
+                <!-- Remove Button -->
+                <div class="product-badges">
+                    <button class="favorite-btn active" onclick="removeFromWishlist({{ item.id }})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Product Image -->
+                <div class="product-image-container" style="position: relative;">
+                    {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" class="card-img-top" alt="{{ item.product.name }}"
+                        style="height: 200px; width: 100%; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                    {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+                        style="height: 200px; width: 100%; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                        <i class="fas fa-image fa-4x"></i>
+                    </div>
+                    {% endif %}
+
+                    <!-- Stock Status Badge -->
+                    {% if item.product.stock <= 0 %} <span class="stock-badge out-of-stock">Out of Stock</span>
+                        {% elif item.product.stock < 5 %} <span class="stock-badge low-stock">
+                            Only {{ item.product.stock }} left!</span>
+                            {% endif %}
+                </div>
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.product.name }}</h5>
+                    <p class="card-text text-muted">{{ item.product.category.name }}</p>
+
+                    <!-- Price Section -->
+                    <div class="price-section mb-3">
+                        <span class="current-price">₹{{ item.product.price }}</span>
+                        {% if item.product.compare_price %}
+                        <span class="original-price ms-2">₹{{ item.product.compare_price }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'product_detail' item.product.category.slug item.product.slug %}"
+                            class="btn btn-outline-primary flex-grow-1">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        {% if item.product.stock > 0 %}
+                        <button class="btn btn-primary flex-grow-1" onclick="moveToCart({{ item.id }})">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                        {% else %}
+                        <button class="btn btn-secondary flex-grow-1" disabled>
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty Wishlist -->
+    <div class="row">
+        <div class="col-12">
+            <div class="empty-cart text-center py-5">
+                <div class="empty-cart-icon mb-4">
+                    <i class="fas fa-heart fa-5x text-muted"></i>
+                </div>
+                <h3 class="mb-3">Your wishlist is empty!</h3>
+                <p class="text-muted mb-4">Save items you love to your wishlist</p>
+                <a href="{% url 'all_products' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-bag me-2"></i>Shop Now
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+    function removeFromWishlist(itemId) {
+        if (confirm('Remove this item from wishlist?')) {
+            fetch(`/remove-from-wishlist/${itemId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    }
+                });
+        }
+    }
+
+    function moveToCart(itemId) {
+        fetch(`/move-to-cart/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Item moved to cart!');
+                    location.reload();
+                }
+            });
+    }
+</script>
+{% endblock %}
+{% endblock %}

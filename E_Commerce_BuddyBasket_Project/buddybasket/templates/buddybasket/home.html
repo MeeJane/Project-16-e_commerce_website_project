@@ -1,0 +1,679 @@
+{% extends 'buddybasket/base.html' %}
+{% load static %}
+
+{% block title %}Home - BuddyBasket{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Image Slider -->
+<!-- Hero Section with Image Slider (5 Slides) -->
+<section class="hero-slider">
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <!-- Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+                aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+        </div>
+
+        <!-- Carousel Items -->
+        <div class="carousel-inner">
+            <!-- Slide 1 - Welcome Slide (Existing) -->
+            <!-- Slide 1 - Welcome Slide with Fancy Styling -->
+            <div class="carousel-item active">
+                <div class="slide-overlay fancy-overlay"></div>
+                <img src="https://plus.unsplash.com/premium_photo-1677995700941-100976883af7?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvcHxlbnwwfHwwfHx8MA%3D%3D"
+                    class="d-block w-100" alt="Shopping Banner">
+
+                <!-- Floating Elements -->
+                <div class="floating-element element-1">✨</div>
+                <div class="floating-element element-2">🛒</div>
+                <div class="floating-element element-3">😊</div>
+                <div class="floating-element element-4">🎉</div>
+                <div class="floating-element element-5">💫</div>
+
+                <div class="carousel-caption fancy-caption">
+                    <!-- Animated Badge -->
+                    <div class="fancy-badge mb-4">
+                        <span class="badge-text">Welcome to</span>
+                        <span class="badge-highlight">BuddyBasket</span>
+                    </div>
+
+                    <!-- Main Title with Gradient -->
+                    <h1 class="fancy-title">
+                        <span class="title-line">Fill Your Basket</span>
+                        <span class="title-line highlight">with Smiles</span>
+                    </h1>
+
+                    <!-- Animated Description -->
+                    <div class="fancy-description">
+                        <p class="mb-4">Your one-stop destination for quality products at the best prices.</p>
+                    </div>
+
+                    <!-- Features Pills -->
+                    <div class="features-pills mb-5">
+                        <span class="pill"><i class="fas fa-truck me-2"></i>Free Shipping</span>
+                        <span class="pill"><i class="fas fa-shield-alt me-2"></i>Secure Payment</span>
+                        <span class="pill"><i class="fas fa-undo-alt me-2"></i>Easy Returns</span>
+                        <span class="pill"><i class="fas fa-headset me-2"></i>24/7 Support</span>
+                    </div>
+
+                    <!-- Fancy Buttons -->
+                    <div class="fancy-buttons">
+                        <a href="{% url 'all_products' %}" class="fancy-btn primary">
+                            <span class="btn-text">Shop Now</span>
+                            <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#featured" class="fancy-btn outline">
+                            <span class="btn-text">Explore Products</span>
+                            <span class="btn-icon"><i class="fas fa-eye"></i></span>
+                        </a>
+                    </div>
+
+                    <!-- Stats Counter -->
+                    <div class="stats-container mt-5">
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="15000">15000</span>
+                            <span class="stat-plus">+</span>
+                            <span class="stat-label">Happy Customers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="5000">5000</span>
+                            <span class="stat-plus">+</span>
+                            <span class="stat-label">Products</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="25">25</span>
+                            <span class="stat-plus">+</span>
+                            <span class="stat-label">Categories</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2 - Electronics Offer -->
+            <div class="carousel-item">
+                <div class="slide-overlay"></div>
+                <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                    class="d-block w-100" alt="Electronics Sale">
+                <div class="carousel-caption">
+                    <span class="offer-badge mb-3">🔥 HOT DEALS</span>
+                    <h1 class="display-3 fw-bold mb-3">Electronics Bonanza!</h1>
+                    <p class="lead fs-3 mb-3">Up to <span class="offer-highlight">40% OFF</span></p>
+                    <div class="offer-timer mb-4">
+                        <span class="timer-badge"><i class="fas fa-clock me-2"></i>Limited Time Offer</span>
+                    </div>
+                    <div class="product-showcase mb-4">
+                        <span class="product-tag">Smartphones</span>
+                        <span class="product-tag">Laptops</span>
+                        <span class="product-tag">Headphones</span>
+                        <span class="product-tag">Smart Watches</span>
+                    </div>
+                    <a href="{% url 'category_products' 'electronics' %}" class="btn btn-primary btn-lg px-5 py-3">
+                        <i class="fas fa-bolt me-2"></i>Shop Electronics
+                    </a>
+                </div>
+            </div>
+
+            <!-- Slide 3 - Fashion Offer -->
+            <div class="carousel-item">
+                <div class="slide-overlay"></div>
+                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                    class="d-block w-100" alt="Fashion Sale">
+                <div class="carousel-caption">
+                    <span class="offer-badge mb-3">✨ STYLE SALE</span>
+                    <h1 class="display-3 fw-bold mb-3">Fashion Week Special!</h1>
+                    <p class="lead fs-3 mb-3">Flat <span class="offer-highlight">50% OFF</span> on Top Brands</p>
+                    <div class="offer-timer mb-4">
+                        <span class="timer-badge"><i class="fas fa-tag me-2"></i>Men • Women • Kids</span>
+                    </div>
+                    <div class="product-showcase mb-4">
+                        <span class="product-tag">T-Shirts</span>
+                        <span class="product-tag">Jeans</span>
+                        <span class="product-tag">Dresses</span>
+                        <span class="product-tag">Footwear</span>
+                    </div>
+                    <a href="{% url 'category_products' 'clothing' %}" class="btn btn-primary btn-lg px-5 py-3">
+                        <i class="fas fa-shopping-bag me-2"></i>Shop Fashion
+                    </a>
+                </div>
+            </div>
+
+            <!-- Slide 4 - Beauty Offer (New) -->
+            <div class="carousel-item">
+                <div class="slide-overlay"></div>
+                <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                    class="d-block w-100" alt="Beauty Sale">
+                <div class="carousel-caption">
+                    <span class="offer-badge mb-3">🌸 BEAUTY DEALS</span>
+                    <h1 class="display-3 fw-bold mb-3">Glow Up with BuddyBasket!</h1>
+                    <p class="lead fs-3 mb-3">Buy 2 Get <span class="offer-highlight">1 FREE</span></p>
+                    <div class="offer-timer mb-4">
+                        <span class="timer-badge"><i class="fas fa-gift me-2"></i>On all skincare & makeup</span>
+                    </div>
+                    <div class="product-showcase mb-4">
+                        <span class="product-tag">Face Creams</span>
+                        <span class="product-tag">Makeup</span>
+                        <span class="product-tag">Serums</span>
+                        <span class="product-tag">Hair Care</span>
+                    </div>
+                    <a href="{% url 'category_products' 'beauty' %}" class="btn btn-primary btn-lg px-5 py-3">
+                        <i class="fas fa-spa me-2"></i>Shop Beauty
+                    </a>
+                </div>
+            </div>
+
+            <!-- Slide 5 - Books & More (New) -->
+            <div class="carousel-item">
+                <div class="slide-overlay"></div>
+                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                    class="d-block w-100" alt="Books Sale">
+                <div class="carousel-caption">
+                    <span class="offer-badge mb-3">📚 READING SALE</span>
+                    <h1 class="display-3 fw-bold mb-3">Book Lovers Special!</h1>
+                    <p class="lead fs-3 mb-3">Starting at just <span class="offer-highlight">₹99</span></p>
+                    <div class="offer-timer mb-4">
+                        <span class="timer-badge"><i class="fas fa-book-open me-2"></i>Bestsellers • Classics • New
+                            Arrivals</span>
+                    </div>
+                    <div class="product-showcase mb-4">
+                        <span class="product-tag">Fiction</span>
+                        <span class="product-tag">Self-Help</span>
+                        <span class="product-tag">Educational</span>
+                        <span class="product-tag">Comics</span>
+                    </div>
+                    <a href="{% url 'category_products' 'books' %}" class="btn btn-primary btn-lg px-5 py-3">
+                        <i class="fas fa-book me-2"></i>Shop Books
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+
+
+<!-- Big Day News Ticker - Add this NEW section -->
+<section class="news-ticker-section py-3"
+    style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-2 col-md-3">
+                <div class="news-label">
+                    <i class="fas fa-bullhorn me-2"></i>
+                    <span class="fw-bold">BIG DAY NEWS!</span>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-7">
+                <div class="ticker-wrapper">
+                    <div class="ticker-content">
+                        <span class="ticker-item"><i class="fas fa-gift me-2"></i>🎉 Republic Day Sale: Up to 70% OFF!
+                            🇮🇳</span>
+                        <span class="ticker-item"><i class="fas fa-fire me-2"></i>🔥 Flash Sale: Extra 10% off on
+                            Electronics</span>
+                        <span class="ticker-item"><i class="fas fa-truck me-2"></i>🚚 Free Shipping on orders above
+                            ₹499</span>
+                        <span class="ticker-item"><i class="fas fa-star me-2"></i>✨ New Year Special: Buy 2 Get 1 Free
+                            on Beauty</span>
+                        <span class="ticker-item"><i class="fas fa-clock me-2"></i>⏰ Last 24 Hours: Weekend Mega
+                            Sale!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-end">
+                <a href="{% url 'all_products' %}" class="btn btn-light btn-sm rounded-pill px-4">
+                    View All <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Search Bar Section -->
+<section class="search-section py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form class="d-flex" role="search" method="GET" action="{% url 'search_products' %}">
+                    <input class="form-control form-control-lg me-2" type="search" name="q"
+                        placeholder="Search for products, categories..." aria-label="Search">
+                    <button class="btn btn-primary btn-lg" type="submit">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </form>
+                <div class="text-center mt-3">
+                    <small class="text-muted">Popular: Electronics, Clothing, Books, Beauty</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories -->
+<section class="categories-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Shop by Category</h2>
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    {% if category.image %}
+                    <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}"
+                        style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+                        style="height: 200px;">
+                        <i class="fas fa-folder fa-4x"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                        <a href="{% url 'category_products' category.slug %}"
+                            class="btn btn-outline-primary btn-sm">View Products</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No categories available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section id="featured" class="featured-products py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Featured Products</h2>
+        <div class="row">
+            {% for product in featured_products %}
+            <!-- Product Card - With Stock Status at Bottom-Right -->
+            <div class="col-md-3 mb-4">
+                <div class="product-card h-100 border-0 shadow-sm" data-product-id="{{ product.id }}"
+                    data-wishlisted="{% if product.id in wishlisted_ids %}true{% else %}false{% endif %}">
+                    <!-- Top Badges (Featured, Discount) and Favorite Button -->
+                    <div class="product-badges">
+                        {% if product.is_featured %}
+                        <span class="badge-featured">🔥 Featured</span>
+                        {% endif %}
+
+                        {% if product.discount_percentage > 0 %}
+                        <span class="badge-discount">-{{ product.discount_percentage }}%</span>
+                        {% endif %}
+
+                        <button class="favorite-btn {% if product.id in wishlisted_ids %}active{% endif %}"
+                            onclick="toggleFavorite(this, {{ product.id }})">
+                            <i class="{% if product.id in wishlisted_ids %}fas{% else %}far{% endif %} fa-heart"></i>
+                        </button>
+                    </div>
+
+                    <!-- Image Container with Stock Badge Overlay -->
+                    <div class="product-image-container" style="position: relative;">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}"
+                            style="height: 200px; width: 100%; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                        {% else %}
+                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+                            style="height: 200px; width: 100%; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                            <i class="fas fa-image fa-4x"></i>
+                            <span class="ms-2">No Image</span>
+                        </div>
+                        {% endif %}
+
+                        <!-- Stock Status Badge - Bottom Right Corner -->
+                        {% if product.stock <= 0 %} <span class="stock-badge out-of-stock">Out of Stock</span>
+                            {% elif product.stock < 5 %} <span class="stock-badge low-stock">Only {{ product.stock }}
+                                left!</span>
+                                {% endif %}
+                    </div>
+
+                    <div class="card-body">
+                        <!-- Product Title -->
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">{{ product.category.name }}</p>
+
+                        <!-- Price Section -->
+                        <div class="price-section mb-3">
+                            <span class="current-price">₹{{ product.price }}</span>
+                            {% if product.compare_price %}
+                            <span class="original-price ms-2">₹{{ product.compare_price }}</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- View Product Button -->
+                        <a href="{% url 'product_detail' product.category.slug product.slug %}"
+                            class="btn btn-primary w-100">
+                            <i class="fas fa-eye me-2"></i>View Product
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No featured products available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- Big Day News Aside - Add this NEW section -->
+<!-- Big Day Sale - Parallax Section -->
+<section class="parallax-sale-section"
+    style="background-image: url('https://webandcrafts.com/_next/image?url=https%3A%2F%2Fadmin.wac.co%2Fuploads%2FWhat_is_E_commerce_and_What_are_its_Applications_2_d2eb0d4402.jpg&w=4500&q=90');">
+    <div class="parallax-overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <!-- Sale Badge -->
+                <div class="sale-badge mb-4">
+                    <span class="badge-pulse">🎉 BIG DAY SALE 🎉</span>
+                </div>
+
+                <!-- Main Offer Text -->
+                <h2 class="display-3 fw-bold text-white mb-4">Up to <span class="offer-highlight">70% OFF</span></h2>
+
+                <!-- Countdown Timer -->
+                <div class="countdown-wrapper mb-5">
+                    <div class="countdown-box">
+                        <span class="countdown-label">Days</span>
+                        <span class="countdown-number" id="days">02</span>
+                    </div>
+                    <div class="countdown-sep">:</div>
+                    <div class="countdown-box">
+                        <span class="countdown-label">Hours</span>
+                        <span class="countdown-number" id="hours">12</span>
+                    </div>
+                    <div class="countdown-sep">:</div>
+                    <div class="countdown-box">
+                        <span class="countdown-label">Minutes</span>
+                        <span class="countdown-number" id="minutes">30</span>
+                    </div>
+                    <div class="countdown-sep">:</div>
+                    <div class="countdown-box">
+                        <span class="countdown-label">Seconds</span>
+                        <span class="countdown-number" id="seconds">00</span>
+                    </div>
+                </div>
+
+                <!-- Offer Categories -->
+                <div class="offer-tags mb-5">
+                    <span class="offer-tag">Electronics</span>
+                    <span class="offer-tag">Fashion</span>
+                    <span class="offer-tag">Beauty</span>
+                    <span class="offer-tag">Home</span>
+                    <span class="offer-tag">Books</span>
+                </div>
+
+                <!-- CTA Button -->
+                <a href="{% url 'all_products' %}" class="btn btn-primary btn-lg px-5 py-3">
+                    <i class="fas fa-bolt me-2"></i>Shop the Sale
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Why Choose Us Section -->
+<section class="features-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Why Choose BuddyBasket?</h2>
+        <div class="row">
+            <div class="col-md-3 text-center mb-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-truck fa-3x text-primary"></i>
+                </div>
+                <h5>Free Shipping</h5>
+                <p class="text-muted">On orders above ₹499</p>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                </div>
+                <h5>Secure Payment</h5>
+                <p class="text-muted">100% secure transactions</p>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-undo-alt fa-3x text-primary"></i>
+                </div>
+                <h5>Easy Returns</h5>
+                <p class="text-muted">7-day return policy</p>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-headset fa-3x text-primary"></i>
+                </div>
+                <h5>24/7 Support</h5>
+                <p class="text-muted">Always here to help</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter-section py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h3 class="mb-3">Subscribe to Our Newsletter</h3>
+                <p class="mb-4">Get the latest updates on new products and upcoming sales</p>
+                <form class="row g-3 justify-content-center">
+                    <div class="col-md-8">
+                        <input type="email" class="form-control form-control-lg" placeholder="Enter your email">
+                    </div>
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-light btn-lg">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- FAQ Section - Add this NEW section -->
+<section class="faq-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Frequently Asked Questions</h2>
+            <p class="lead text-muted">Got questions? We've got answers! 😊</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="accordion" id="faqAccordionLeft">
+                    <!-- FAQ 1 -->
+                    <div class="accordion-item mb-3 border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button rounded-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq1">
+                                <i class="fas fa-truck me-3" style="color: var(--primary);"></i>
+                                What are your shipping charges?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordionLeft">
+                            <div class="accordion-body">
+                                We offer <strong>free shipping</strong> on all orders above ₹499. For orders below ₹499,
+                                a flat shipping charge of ₹40 applies. Delivery usually takes 3-5 business days.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="accordion-item mb-3 border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq2">
+                                <i class="fas fa-undo-alt me-3" style="color: var(--primary);"></i>
+                                What is your return policy?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordionLeft">
+                            <div class="accordion-body">
+                                We offer a <strong>7-day easy return policy</strong>. If you're not satisfied with your
+                                purchase, you can return it within 7 days of delivery for a full refund or exchange.
+                                Items must be unused and in original packaging.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="accordion-item mb-3 border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq3">
+                                <i class="fas fa-credit-card me-3" style="color: var(--primary);"></i>
+                                What payment methods do you accept?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordionLeft">
+                            <div class="accordion-body">
+                                We accept all major payment methods:
+                                <ul class="mt-2 mb-0">
+                                    <li>Credit/Debit Cards (Visa, MasterCard, RuPay)</li>
+                                    <li>UPI (Google Pay, PhonePe, Paytm)</li>
+                                    <li>Net Banking</li>
+                                    <li>Cash on Delivery (COD)</li>
+                                    <li>EMI options available on select cards</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="accordion-item mb-3 border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq4">
+                                <i class="fas fa-clock me-3" style="color: var(--primary);"></i>
+                                How long does delivery take?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordionLeft">
+                            <div class="accordion-body">
+                                Standard delivery takes <strong>3-5 business days</strong> for most locations. Metro
+                                cities may get delivery in 2-3 days. We also offer express shipping at an additional
+                                cost for next-day delivery in select areas.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="accordion" id="faqAccordionRight">
+                    <!-- FAQ 5 -->
+                    <div class="accordion-item mb-3 border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq5">
+                                <i class="fas fa-user-lock me-3" style="color: var(--primary);"></i>
+                                Is my payment information secure?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordionRight">
+                            <div class="accordion-body">
+                                Absolutely! We use <strong>256-bit SSL encryption</strong> to protect your payment
+                                information. We never store your card details on our servers. All transactions are 100%
+                                secure.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 6 -->
+                    <div class="accordion-item mb-3 border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq6">
+                                <i class="fas fa-tags me-3" style="color: var(--primary);"></i>
+                                Do you offer discounts for bulk orders?
+                            </button>
+                        </h2>
+                        <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordionRight">
+                            <div class="accordion-body">
+                                Yes! For bulk orders (10+ items), please contact our customer support. We offer special
+                                corporate discounts and customized pricing based on order volume.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 7 -->
+                    <div class="accordion-item mb-3 border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq7">
+                                <i class="fas fa-exchange-alt me-3" style="color: var(--primary);"></i>
+                                Can I exchange an item?
+                            </button>
+                        </h2>
+                        <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordionRight">
+                            <div class="accordion-body">
+                                Yes, you can exchange items within 7 days of delivery. Size exchanges are free. For
+                                product exchanges (different color/model), the price difference will be adjusted.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 8 -->
+                    <div class="accordion-item mb-3 border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq8">
+                                <i class="fas fa-headset me-3" style="color: var(--primary);"></i>
+                                How can I contact customer support?
+                            </button>
+                        </h2>
+                        <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordionRight">
+                            <div class="accordion-body">
+                                You can reach us 24/7 through:
+                                <ul class="mt-2 mb-0">
+                                    <li><i class="fas fa-phone me-2 text-primary"></i> Call: +91 98765 43210</li>
+                                    <li><i class="fas fa-envelope me-2 text-primary"></i> Email: support@buddybasket.com
+                                    </li>
+                                    <li><i class="fas fa-comment me-2 text-primary"></i> Live Chat (available 9AM-8PM)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Still have questions? -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <div class="more-questions p-4 bg-light rounded-3">
+                    <h4 class="mb-3">Still have questions? 😊</h4>
+                    <p class="mb-3">We're here to help! Reach out to us anytime.</p>
+                    <a href="{% url 'contact' %}" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

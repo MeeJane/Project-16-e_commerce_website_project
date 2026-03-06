@@ -1,0 +1,141 @@
+{% extends 'buddybasket/base.html' %}
+{% load static %}
+
+{% block title %}My Orders - BuddyBasket{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">My Orders</h1>
+            <p class="lead text-muted">Track and manage your orders</p>
+        </div>
+    </div>
+
+    {% if orders %}
+    <div class="row">
+        <div class="col-12">
+            {% for order in orders %}
+            <!-- Order Card -->
+            <div class="card shadow-sm mb-4 border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0 fw-bold">Order #{{ order.order_number }}</h5>
+                        <small class="text-muted">Placed on {{ order.created_at|date:"F j, Y" }}</small>
+                    </div>
+                    <div>
+                        <!-- Main Status Badge -->
+                        <span
+                            class="badge {% if order.status == 'delivered' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% elif order.status == 'shipped' %}bg-info{% else %}bg-warning{% endif %} px-3 py-2">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <!-- Order Items Preview -->
+                        <div class="col-md-8">
+                            {% for item in order.items.all|slice:":3" %}
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="me-3">
+                                    {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    {% else %}
+                                    <div
+                                        style="width: 60px; height: 60px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">{{ item.product_name }}</h6>
+                                    <small class="text-muted">
+                                        Qty: {{ item.quantity }} × ₹{{ item.product_price }}</small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% if order.items.count > 3 %}
+                            <p class="text-muted small">+{{ order.items.count|add:"-3" }} more items</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Order Summary -->
+                        <div class="col-md-4 border-start">
+                            <div class="ps-3">
+                                <p class="mb-2"><strong>Total:</strong> ₹{{ order.total }}</p>
+                                <p class="mb-2"><strong>Payment:</strong> {{ order.payment_method }}</p>
+                                <p class="mb-3">
+                                    <strong>Status:</strong>
+                                    <span
+                                        class="badge {% if order.payment_status == 'paid' %}bg-success{% else %}bg-warning{% endif %}">
+                                        {{ order.get_payment_status_display }}
+                                    </span>
+                                </p>
+
+                                <div class="d-grid">
+                                    <a href="{% url 'order_detail' order.id %}" class="btn btn-outline-primary btn-sm">
+                                        View Details <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Tracking Progress Bar -->
+                <div class="card-footer bg-white py-3">
+                    <div class="order-tracking">
+                        <div class="d-flex justify-content-between">
+                            <div
+                                class="text-center {% if order.status != 'cancelled' %}text-primary{% else %}text-muted{% endif %}">
+                                <i class="fas fa-check-circle fa-2x mb-1"></i>
+                                <small>Order Placed</small>
+                            </div>
+                            <div
+                                class="text-center {% if order.status == 'processing' or order.status == 'shipped' or order.status == 'delivered' %}text-primary{% else %}text-muted{% endif %}">
+                                <i class="fas fa-box fa-2x mb-1"></i>
+                                <small>Processing</small>
+                            </div>
+                            <div
+                                class="text-center {% if order.status == 'shipped' or order.status == 'delivered' %}text-primary{% else %}text-muted{% endif %}">
+                                <i class="fas fa-truck fa-2x mb-1"></i>
+                                <small>Shipped</small>
+                            </div>
+                            <div
+                                class="text-center {% if order.status == 'delivered' %}text-success{% else %}text-muted{% endif %}">
+                                <i class="fas fa-home fa-2x mb-1"></i>
+                                <small>Delivered</small>
+                            </div>
+                        </div>
+                        <div class="progress mt-2" style="height: 4px;">
+                            <div class="progress-bar bg-primary" role="progressbar"
+                                style="width: {% if order.status == 'pending' %}25{% elif order.status == 'processing' %}50{% elif order.status == 'shipped' %}75{% elif order.status == 'delivered' %}100{% else %}0{% endif %}%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty Orders -->
+    <div class="row">
+        <div class="col-12">
+            <div class="empty-cart text-center py-5">
+                <div class="empty-cart-icon mb-4">
+                    <i class="fas fa-box-open fa-5x text-muted"></i>
+                </div>
+                <h3 class="mb-3">No orders yet!</h3>
+                <p class="text-muted mb-4">Looks like you haven't placed any orders.</p>
+                <a href="{% url 'all_products' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

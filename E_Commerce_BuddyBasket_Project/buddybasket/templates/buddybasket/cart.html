@@ -1,0 +1,402 @@
+{% extends 'buddybasket/base.html' %}
+{% load static %}
+
+{% block title %}Shopping Cart - BuddyBasket{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">Shopping Cart</h1>
+            <p class="lead text-muted">Review and update your items before checkout</p>
+        </div>
+    </div>
+
+    {% if cart_items %}
+    <div class="row">
+        <!-- Cart Items Section -->
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0">Cart Items (<span id="cart-total-items">{{ cart_items|length }}</span>)</h5>
+                </div>
+                <div class="card-body p-0">
+                    <!-- Cart Items List -->
+                    <div class="cart-items-list" id="cart-items-list">
+                        {% for item in cart_items %}
+                        <!-- Single Cart Item -->
+                        <div class="cart-item p-3 border-bottom" data-item-id="{{ item.id }}"
+                            data-product-id="{{ item.product.id }}">
+                            <div class="row align-items-center">
+                                <!-- Product Image -->
+                                <div class="col-md-2 col-3">
+                                    {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" class="img-fluid rounded"
+                                        alt="{{ item.product.name }}">
+                                    {% else %}
+                                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded"
+                                        style="height: 80px;">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Product Details -->
+                                <div class="col-md-4 col-9">
+                                    <h6 class="mb-1">{{ item.product.name }}</h6>
+                                    <p class="text-muted small mb-1">{{ item.product.category.name }}</p>
+
+                                    <!-- Low stock warning -->
+                                    {% if item.product.stock == 1 %}
+                                    <span class="badge bg-warning">Only 1 left!</span>
+                                    {% elif item.product.stock == 2 %}
+                                    <span class="badge bg-warning">Only 2 left!</span>
+                                    {% elif item.product.stock == 3 %}
+                                    <span class="badge bg-warning">Only 3 left!</span>
+                                    {% elif item.product.stock == 4 %}
+                                    <span class="badge bg-warning">Only 4 left!</span>
+                                    {% elif item.product.stock == 0 %}
+                                    <span class="badge bg-danger">Out of Stock</span>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Price -->
+                                <div class="col-md-2 col-4 mt-3 mt-md-0">
+                                    <div class="price-info">
+                                        <span class="current-price fw-bold">₹{{ item.product.price }}</span>
+                                        {% if item.product.compare_price %}
+                                        <br><span class="original-price small">₹{{ item.product.compare_price }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Quantity Controls - WITH +/- BUTTONS -->
+                                <div class="col-md-2 col-4 mt-3 mt-md-0">
+                                    <div class="cart-quantity-controls" data-item-id="{{ item.id }}">
+                                        <div class="quantity-selector d-inline-flex align-items-center border rounded">
+                                            <button class="btn btn-sm btn-link px-2"
+                                                onclick="decrementCartItem(this, {{ item.id }}, {{ item.product.price }})">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input type="number"
+                                                class="form-control form-control-sm text-center border-0"
+                                                id="cart-qty-{{ item.id }}" value="{{ item.quantity }}" min="1"
+                                                max="{{ item.product.stock }}" style="width: 50px;" readonly>
+                                            <button class="btn btn-sm btn-link px-2"
+                                                onclick="incrementCartItem(this, {{ item.id }}, {{ item.product.price }})">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Item Total & Remove -->
+                                <div class="col-md-2 col-4 mt-3 mt-md-0 text-end">
+                                    <div class="item-total">
+                                        <span class="fw-bold text-primary" id="item-total-{{ item.id }}">
+                                            ₹{{ item.total_price }}
+                                        </span>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-danger mt-2"
+                                        onclick="removeCartItem({{ item.id }})">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'all_products' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                        </a>
+                        <button class="btn btn-outline-danger" onclick="clearCart()">
+                            <i class="fas fa-trash-alt me-2"></i>Clear Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary Section -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Summary Details -->
+                    <div class="summary-item d-flex justify-content-between mb-2">
+                        <span class="text-muted">Subtotal (<span id="summary-items-count">{{ cart_items|length }}</span>
+                            items):</span>
+                        <span class="fw-bold" id="summary-subtotal">₹{{ subtotal|default:"0" }}</span>
+                    </div>
+                    <div class="summary-item d-flex justify-content-between mb-2">
+                        <span class="text-muted">Shipping:</span>
+                        <span class="fw-bold" id="summary-shipping">
+                            {% if subtotal >= 499 %}Free{% else %}₹40{% endif %}
+                        </span>
+                    </div>
+                    <div class="summary-item d-flex justify-content-between mb-2">
+                        <span class="text-muted">Tax (GST):</span>
+                        <span class="fw-bold" id="summary-tax">₹0</span>
+                    </div>
+                    {% if discount > 0 %}
+                    <div class="summary-item d-flex justify-content-between mb-2 text-success">
+                        <span>Discount:</span>
+                        <span>-₹{{ discount }}</span>
+                    </div>
+                    {% endif %}
+                    <hr>
+                    <div class="summary-total d-flex justify-content-between mb-3">
+                        <span class="h5">Total:</span>
+                        <span class="h5 text-primary" id="summary-total">₹{{ total|default:"0" }}</span>
+                    </div>
+
+                    <!-- Promo Code -->
+                    <div class="promo-code mb-3">
+                        <label class="form-label small text-muted">Have a promo code?</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Enter code" id="promo-code">
+                            <button class="btn btn-outline-primary" type="button" onclick="applyPromo()">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Checkout Button -->
+                    <button class="btn btn-primary w-100 py-3" onclick="proceedToCheckout()">
+                        <i class="fas fa-bolt me-2"></i>Proceed to Checkout
+                    </button>
+
+                    <!-- Payment Icons -->
+                    <div class="payment-icons text-center mt-3">
+                        <small class="text-muted d-block mb-2">We accept:</small>
+                        <span class="payment-icon mx-1"><i class="fab fa-cc-visa fa-2x"></i></span>
+                        <span class="payment-icon mx-1"><i class="fab fa-cc-mastercard fa-2x"></i></span>
+                        <span class="payment-icon mx-1"><i class="fab fa-cc-amex fa-2x"></i></span>
+                        <span class="payment-icon mx-1"><i class="fab fa-cc-paypal fa-2x"></i></span>
+                        <span class="payment-icon mx-1"><i class="fas fa-credit-card fa-2x"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Need Help Card -->
+            <div class="card mt-3 bg-light border-0">
+                <div class="card-body">
+                    <h6><i class="fas fa-headset me-2 text-primary"></i>Need Help?</h6>
+                    <p class="small text-muted mb-2">Have questions about your order?</p>
+                    <a href="{% url 'contact' %}" class="btn btn-sm btn-outline-primary w-100">
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty Cart -->
+    <div class="row">
+        <div class="col-12">
+            <div class="empty-cart text-center py-5">
+                <div class="empty-cart-icon mb-4">
+                    <i class="fas fa-shopping-cart fa-5x text-muted"></i>
+                </div>
+                <h3 class="mb-3">Your cart is empty!</h3>
+                <p class="text-muted mb-4">Looks like you haven't added anything to your cart yet.</p>
+                <a href="{% url 'all_products' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ====== Helper function to get CSRF token ======
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // ====== Cart Quantity Controls ======
+    function incrementCartItem(btn, itemId, price) {
+        const qtyInput = document.getElementById('cart-qty-' + itemId);
+        const currentVal = parseInt(qtyInput.value);
+        const max = parseInt(qtyInput.getAttribute('max'));
+
+        if (currentVal < max) {
+            const newQty = currentVal + 1;
+            updateCartItem(itemId, newQty, price);
+        }
+    }
+
+    function decrementCartItem(btn, itemId, price) {
+        const qtyInput = document.getElementById('cart-qty-' + itemId);
+        const currentVal = parseInt(qtyInput.value);
+
+        if (currentVal > 1) {
+            const newQty = currentVal - 1;
+            updateCartItem(itemId, newQty, price);
+        }
+    }
+
+    // ====== Update Cart Item via AJAX ======
+    function updateCartItem(itemId, quantity, price) {
+        fetch(`/update-cart/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ quantity: quantity })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update quantity input
+                    const qtyInput = document.getElementById('cart-qty-' + itemId);
+                    qtyInput.value = quantity;
+
+                    // Update item total
+                    const itemTotal = document.getElementById('item-total-' + itemId);
+                    itemTotal.textContent = '₹' + (price * quantity).toLocaleString('en-IN');
+
+                    // Update cart summary
+                    updateCartSummary();
+
+                    // Update cart badge in navbar
+                    const cartBadge = document.getElementById('cartBadge');
+                    if (cartBadge) {
+                        cartBadge.textContent = data.cart_count;
+                        cartBadge.style.display = 'flex';
+                    }
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong!');
+            });
+    }
+
+    // ====== Remove Cart Item ======
+    function removeCartItem(itemId) {
+        if (confirm('Are you sure you want to remove this item?')) {
+            fetch(`/remove-from-cart/${itemId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove item element
+                        const itemElement = document.querySelector(`.cart-item[data-item-id="${itemId}"]`);
+                        itemElement.remove();
+
+                        // Update cart summary
+                        updateCartSummary();
+
+                        // Update cart badge
+                        const cartBadge = document.getElementById('cartBadge');
+                        if (cartBadge) {
+                            cartBadge.textContent = data.cart_count;
+                        }
+
+                        // Check if cart is empty
+                        const cartItems = document.querySelectorAll('.cart-item');
+                        if (cartItems.length === 0) {
+                            location.reload();
+                        }
+                    }
+                });
+        }
+    }
+
+    // ====== Clear Entire Cart ======
+    function clearCart() {
+        if (confirm('Are you sure you want to clear your entire cart?')) {
+            fetch('/clear-cart/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    }
+                });
+        }
+    }
+
+    // ====== Update Cart Summary ======
+    function updateCartSummary() {
+        const cartItems = document.querySelectorAll('.cart-item');
+        let subtotal = 0;
+        let itemsCount = 0;
+
+        cartItems.forEach(item => {
+            const itemTotal = item.querySelector('.item-total .fw-bold').textContent;
+            const totalValue = parseFloat(itemTotal.replace('₹', '').replace(',', ''));
+            subtotal += totalValue;
+            itemsCount++;
+        });
+
+        // Update UI
+        document.getElementById('summary-items-count').textContent = itemsCount;
+        document.getElementById('cart-total-items').textContent = itemsCount;
+        document.getElementById('summary-subtotal').textContent = '₹' + subtotal.toLocaleString('en-IN');
+
+        // Calculate shipping
+        const shipping = subtotal >= 499 ? 0 : 40;
+        document.getElementById('summary-shipping').textContent = shipping === 0 ? 'Free' : '₹' + shipping;
+
+        // Calculate total
+        const total = subtotal + shipping;
+        document.getElementById('summary-total').textContent = '₹' + total.toLocaleString('en-IN');
+    }
+
+    // ====== Apply Promo Code ======
+    function applyPromo() {
+        const promoCode = document.getElementById('promo-code').value;
+        if (promoCode.toUpperCase() === 'BUDDY20') {
+            alert('Promo code applied! You got 20% off!');
+            // Apply discount logic here
+        } else {
+            alert('Invalid promo code');
+        }
+    }
+
+    // ====== Proceed to Checkout ======
+    function proceedToCheckout() {
+        const loginStatus = document.getElementById('user-login-status');
+        const isLoggedIn = loginStatus && loginStatus.dataset.loggedIn === 'true';
+
+        if (isLoggedIn) {
+            window.location.href = '/checkout/';
+        } else {
+            window.location.href = '/login/?next=/cart/';
+        }
+    }
+</script>
+{% endblock %}

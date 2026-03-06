@@ -1,0 +1,501 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuddyBasket - {% block title %}Fill Your Basket with Smiles{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Static CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'buddybasket/css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Hidden login status indicator - Add this anywhere in base.html -->
+    {% if user.is_authenticated %}
+    <div id="user-login-status" data-logged-in="true" style="display: none;"></div>
+    {% else %}
+    <div id="user-login-status" data-logged-in="false" style="display: none;"></div>
+    {% endif %}
+    <!-- User authentication status is automatically available in templates -->
+    <!-- No need to add anything, Django makes `user` available automatically -->
+    <!-- Navbar -->
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm py-2">
+        <div class="container-fluid px-4"> <!-- Changed from 'container' to 'container-fluid px-4' -->
+            <!-- Logo and Brand -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <img src="{% static 'buddybasket/images/logo.png' %}" alt="BuddyBasket" height="35" width="auto"
+                    class="me-1">
+                <span class="fw-bold"
+                    style="font-size: 1.3rem; background: linear-gradient(135deg, #ff6b4a, #e54e2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">BuddyBasket</span>
+            </a>
+
+            <!-- Toggler for mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Navigation Links - Reduced left margin -->
+                <ul class="navbar-nav mx-0 ms-2"> <!-- Changed from 'mx-auto' to 'mx-0 ms-2' -->
+                    <li class="nav-item">
+                        <a class="nav-link px-2" href="{% url 'home' %}">Home</a> <!-- Reduced padding -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-2" href="{% url 'all_products' %}">Products</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle px-2" href="#" id="categoriesDropdown" role="button"
+                            data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'all_products' %}">All Products</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            {% for category in categories %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'category_products' category.slug %}">
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-2" href="{% url 'about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-2" href="{% url 'contact' %}">Contact</a>
+                    </li>
+                </ul>
+
+                <!-- Search Bar - Keep as is -->
+                <form class="d-flex me-3" role="search" method="GET" action="{% url 'search_products' %}">
+                    <div class="search-wrapper-compact">
+                        <input class="search-input-compact" type="search" name="q" placeholder="Search..."
+                            aria-label="Search">
+                        <button class="search-btn-compact" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Right Side Icons - Cart, Wishlist, Orders -->
+                <div class="d-flex align-items-center gap-2">
+                    {% if user.is_authenticated %}
+                    <!-- User Greeting and Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle btn-sm" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i>Hi, {{ user.first_name|default:user.username }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'order_history' %}"><i
+                                        class="fas fa-box me-2"></i>My Orders</a></li>
+                            <li><a class="dropdown-item" href="{% url 'wishlist' %}"><i
+                                        class="fas fa-heart me-2"></i>Wishlist</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i
+                                        class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm me-1">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-user-plus me-1"></i>Register
+                    </a>
+                    {% endif %}
+
+                    <!-- Wishlist Icon with Badge -->
+                    <a href="{% url 'wishlist' %}" class="nav-link position-relative p-1">
+                        <i class="fas fa-heart" style="font-size: 1.2rem; color: var(--primary);"></i>
+                        {% if user.is_authenticated and wishlist_count > 0 %}
+                        <span class="icon-badge wishlist-badge" id="wishlistBadge">{{ wishlist_count }}</span>
+                        {% else %}
+                        <span class="icon-badge wishlist-badge" id="wishlistBadge" style="display: none;">0</span>
+                        {% endif %}
+                    </a>
+
+                    <!-- Orders Icon with Badge -->
+                    <a href="{% url 'order_history' %}" class="nav-link position-relative p-1">
+                        <i class="fas fa-box" style="font-size: 1.2rem; color: var(--primary);"></i>
+                        {% if user.is_authenticated and orders_count > 0 %}
+                        <span class="icon-badge orders-badge" id="ordersBadge">{{ orders_count }}</span>
+                        {% else %}
+                        <span class="icon-badge orders-badge" id="ordersBadge" style="display: none;">0</span>
+                        {% endif %}
+                    </a>
+
+                    <!-- Cart Icon with Badge -->
+                    <a href="{% url 'cart' %}" class="nav-link position-relative p-1">
+                        <i class="fas fa-shopping-cart" style="font-size: 1.2rem; color: var(--primary);"></i>
+                        {% if user.is_authenticated and cart_count > 0 %}
+                        <span class="icon-badge cart-badge" id="cartBadge">{{ cart_count }}</span>
+                        {% else %}
+                        <span class="icon-badge cart-badge" id="cartBadge" style="display: none;">0</span>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Messages/Alerts -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <!-- Rich Footer -->
+    <footer class="footer">
+        <div class="footer-top py-5">
+            <div class="container">
+                <div class="row g-4">
+                    <!-- Company Info -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h4 class="footer-widget-title">
+                                <i class="fas fa-shopping-basket me-2" style="color: var(--primary);"></i>
+                                BuddyBasket
+                            </h4>
+                            <p class="mb-3">Fill Your Basket with Smiles 😊</p>
+                            <p class="mb-2"><i class="fas fa-map-marker-alt me-2" style="color: var(--primary);"></i>
+                                123 Shopping Street, Chennai, India - 600001</p>
+                            <p class="mb-2"><i class="fas fa-phone-alt me-2" style="color: var(--primary);"></i> +91
+                                98765 43210</p>
+                            <p class="mb-2"><i class="fas fa-envelope me-2" style="color: var(--primary);"></i>
+                                hello@buddybasket.com</p>
+
+                            <!-- Social Icons -->
+                            <div class="social-icons mt-3">
+                                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="col-lg-2 col-md-6">
+                        <div class="footer-widget">
+                            <h4 class="footer-widget-title">Quick Links</h4>
+                            <ul class="footer-links">
+                                <li><a href="{% url 'home' %}"><i class="fas fa-chevron-right me-2"></i>Home</a></li>
+                                <li><a href="{% url 'all_products' %}"><i
+                                            class="fas fa-chevron-right me-2"></i>Products</a></li>
+                                <li><a href="{% url 'about' %}"><i class="fas fa-chevron-right me-2"></i>About Us</a>
+                                </li>
+                                <li><a href="{% url 'contact' %}"><i class="fas fa-chevron-right me-2"></i>Contact</a>
+                                </li>
+                                <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Track Order</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="col-lg-2 col-md-6">
+                        <div class="footer-widget">
+                            <h4 class="footer-widget-title">Categories</h4>
+                            <ul class="footer-links">
+                                {% for category in categories|slice:":5" %}
+                                <li><a href="{% url 'category_products' category.slug %}"><i
+                                            class="fas fa-chevron-right me-2"></i>{{ category.name }}</a></li>
+                                {% endfor %}
+                                <li><a href="{% url 'all_products' %}"><i class="fas fa-chevron-right me-2"></i>View
+                                        All</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Customer Service -->
+                    <div class="col-lg-2 col-md-6">
+                        <div class="footer-widget">
+                            <h4 class="footer-widget-title">Customer Service</h4>
+                            <ul class="footer-links">
+                                <li><a href="#"><i class="fas fa-chevron-right me-2"></i>FAQ</a></li>
+                                <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Shipping Policy</a></li>
+                                <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Return Policy</a></li>
+                                <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Privacy Policy</a></li>
+                                <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Terms & Conditions</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Newsletter & App -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h4 class="footer-widget-title">Stay Connected</h4>
+                            <p>Subscribe to get updates on offers & new arrivals</p>
+
+                            <!-- Newsletter Form -->
+                            <form class="newsletter-form mb-4">
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Your email" required>
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Download App -->
+                            <h5 class="mb-2">Download App</h5>
+                            <div class="app-buttons">
+                                <a href="#" class="app-btn">
+                                    <i class="fab fa-google-play me-2"></i>
+                                    <span>Google Play</span>
+                                </a>
+                                <a href="#" class="app-btn">
+                                    <i class="fab fa-apple me-2"></i>
+                                    <span>App Store</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Brands / Trust Badges -->
+        <div class="footer-middle py-3" style="background: rgba(255,107,74,0.05);">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <p class="mb-0 fw-bold">Trusted By:</p>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="brands-slider">
+                            <div class="brand-item">🏢 Amazon</div>
+                            <div class="brand-item">🛒 Flipkart</div>
+                            <div class="brand-item">💳 Visa</div>
+                            <div class="brand-item">🔒 MasterCard</div>
+                            <div class="brand-item">📦 Delhivery</div>
+                            <div class="brand-item">🚚 Blue Dart</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods & Copyright -->
+        <div class="footer-bottom py-3">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="payment-methods">
+                            <span class="payment-icon"><i class="fab fa-cc-visa"></i></span>
+                            <span class="payment-icon"><i class="fab fa-cc-mastercard"></i></span>
+                            <span class="payment-icon"><i class="fab fa-cc-amex"></i></span>
+                            <span class="payment-icon"><i class="fab fa-cc-paypal"></i></span>
+                            <span class="payment-icon"><i class="fas fa-credit-card"></i></span>
+                            <span class="payment-icon"><i class="fas fa-mobile-alt"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p class="mb-0">&copy; {% now "Y" %} BuddyBasket. All rights reserved. | Made with <i
+                                class="fas fa-heart" style="color: var(--primary);"></i> in India</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Static JS -->
+    <script src="{% static 'buddybasket/js/script.js' %}"></script>
+
+
+    {% block extra_js %}{% endblock %}
+
+    <!-- Expandable Floating Action Button (FAB) -->
+    <div class="fab-multi-container">
+        <input type="checkbox" id="fab-toggle" class="fab-toggle">
+        <label for="fab-toggle" class="fab fab-main">
+            <i class="fas fa-plus"></i>
+            <i class="fas fa-times"></i>
+        </label>
+
+        <div class="fab-options">
+            <!-- Cart Option -->
+            <div class="fab-option">
+                <button class="fab fab-option-btn"
+                    onclick="{% if user.is_authenticated %}window.location.href='{% url 'cart' %}'{% else %}window.location.href='{% url 'login' %}?next={% url 'cart' %}'{% endif %}">
+                    <i class="fas fa-shopping-cart"></i>
+                    {% if user.is_authenticated and cart_count > 0 %}
+                    <span class="fab-badge" id="fabCartBadge">{{ cart_count }}</span>
+                    {% else %}
+                    <span class="fab-badge" id="fabCartBadge" style="display: none;">0</span>
+                    {% endif %}
+                </button>
+                <span class="fab-option-text">View Cart</span>
+            </div>
+
+            <!-- Wishlist Option -->
+            <div class="fab-option">
+                <button class="fab fab-option-btn"
+                    onclick="{% if user.is_authenticated %}window.location.href='{% url 'wishlist' %}'{% else %}window.location.href='{% url 'login' %}?next={% url 'wishlist' %}'{% endif %}">
+                    <i class="fas fa-heart"></i>
+                    {% if user.is_authenticated and wishlist_count > 0 %}
+                    <span class="fab-badge" id="fabWishlistBadge">{{ wishlist_count }}</span>
+                    {% else %}
+                    <span class="fab-badge" id="fabWishlistBadge" style="display: none;">0</span>
+                    {% endif %}
+                </button>
+                <span class="fab-option-text">Wishlist</span>
+            </div>
+
+            <!-- Orders Option -->
+            <div class="fab-option">
+                <button class="fab fab-option-btn"
+                    onclick="{% if user.is_authenticated %}window.location.href='{% url 'order_history' %}'{% else %}window.location.href='{% url 'login' %}?next={% url 'order_history' %}'{% endif %}">
+                    <i class="fas fa-box"></i>
+                    {% if user.is_authenticated and orders_count > 0 %}
+                    <span class="fab-badge" id="fabOrdersBadge">{{ orders_count }}</span>
+                    {% else %}
+                    <span class="fab-badge" id="fabOrdersBadge" style="display: none;">0</span>
+                    {% endif %}
+                </button>
+                <span class="fab-option-text">My Orders</span>
+            </div>
+
+            <!-- Support Option -->
+            <div class="fab-option">
+                <button class="fab fab-option-btn" onclick="window.location.href='{% url 'contact' %}'">
+                    <i class="fas fa-headset"></i>
+                </button>
+                <span class="fab-option-text">Help & Support</span>
+            </div>
+
+            <!-- Back to Top Option -->
+            <div class="fab-option">
+                <button class="fab fab-option-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+                <span class="fab-option-text">Back to Top</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====== Authentication Functions ======
+
+        // Toggle password visibility
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = field.nextElementSibling.querySelector('i');
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Password strength checker
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordField = document.getElementById('password');
+            if (passwordField) {
+                passwordField.addEventListener('input', checkPasswordStrength);
+            }
+
+            // Confirm password match
+            const confirmField = document.getElementById('confirmPassword');
+            if (confirmField) {
+                confirmField.addEventListener('input', checkPasswordMatch);
+            }
+        });
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthText = document.getElementById('passwordStrength');
+            const strengthBar = document.getElementById('passwordStrengthBar');
+
+            let strength = 0;
+
+            // Check length
+            if (password.length >= 8) strength += 25;
+            // Check for uppercase
+            if (/[A-Z]/.test(password)) strength += 25;
+            // Check for numbers
+            if (/[0-9]/.test(password)) strength += 25;
+            // Check for special characters
+            if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+
+            strengthBar.style.width = strength + '%';
+
+            if (strength <= 25) {
+                strengthText.textContent = 'Weak';
+                strengthBar.className = 'progress-bar bg-danger';
+            } else if (strength <= 50) {
+                strengthText.textContent = 'Fair';
+                strengthBar.className = 'progress-bar bg-warning';
+            } else if (strength <= 75) {
+                strengthText.textContent = 'Good';
+                strengthBar.className = 'progress-bar bg-info';
+            } else {
+                strengthText.textContent = 'Strong';
+                strengthBar.className = 'progress-bar bg-success';
+            }
+        }
+
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const confirmField = document.getElementById('confirmPassword');
+
+            if (password !== confirm) {
+                confirmField.setCustomValidity('Passwords do not match');
+                confirmField.style.borderColor = 'var(--danger)';
+            } else {
+                confirmField.setCustomValidity('');
+                confirmField.style.borderColor = '#ced4da';
+            }
+        }
+
+        // Forgot password alert
+        function showForgotPasswordAlert() {
+            alert('😊 Please contact support to reset your password!');
+        }
+
+
+    </script>
+</body>
+
+</html>

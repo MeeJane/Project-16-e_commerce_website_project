@@ -1,0 +1,133 @@
+{% extends 'buddybasket/base.html' %}
+{% load static %}
+
+{% block title %}About Us - BuddyBasket{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header py-5" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
+    <div class="container text-center text-white">
+        <h1 class="display-4 fw-bold">About BuddyBasket</h1>
+        <p class="lead">Fill Your Basket with Smiles 🤍</p>
+    </div>
+</section>
+
+<!-- Our Story Section -->
+<section class="our-story py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="fw-bold mb-4">Our Story</h2>
+                <p class="fs-5 mb-4">BuddyBasket started with a simple idea: <span
+                        class="text-primary fw-bold">"Shopping should feel like shopping with a friend."</span></p>
+                <p>Founded in 2024, we set out to create an e-commerce platform that's not just about buying products,
+                    but about creating joyful experiences. Our name "BuddyBasket" reflects our commitment to being your
+                    friendly shopping companion.</p>
+                <p>Every product in our basket is carefully selected to ensure quality, value, and most importantly -
+                    smiles! 😊</p>
+
+                <div class="mt-4">
+                    <div class="d-flex gap-3">
+                        <div class="stat-box text-center p-3 bg-light rounded">
+                            <h3 class="text-primary fw-bold">15000+</h3>
+                            <p>Happy Customers</p>
+                        </div>
+                        <div class="stat-box text-center p-3 bg-light rounded">
+                            <h3 class="text-primary fw-bold">5000+</h3>
+                            <p>Products</p>
+                        </div>
+                        <div class="stat-box text-center p-3 bg-light rounded">
+                            <h3 class="text-primary fw-bold">25+</h3>
+                            <p>Categories</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3" alt="Happy Shopping"
+                    class="img-fluid rounded-3 shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Values -->
+<section class="our-values py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Our Values 💫</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="value-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
+                    <div class="value-icon mb-3">
+                        <i class="fas fa-heart fa-3x" style="color: var(--primary);"></i>
+                    </div>
+                    <h4>Customer First</h4>
+                    <p class="text-muted">Your happiness is our top priority. We go the extra mile to ensure you smile
+                        with every purchase.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
+                    <div class="value-icon mb-3">
+                        <i class="fas fa-shield-alt fa-3x" style="color: var(--primary);"></i>
+                    </div>
+                    <h4>Trust & Quality</h4>
+                    <p class="text-muted">Every product is verified for quality. Shop with confidence knowing you're
+                        getting the best.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
+                    <div class="value-icon mb-3">
+                        <i class="fas fa-smile fa-3x" style="color: var(--primary);"></i>
+                    </div>
+                    <h4>Joyful Shopping</h4>
+                    <p class="text-muted">We believe shopping should be fun! That's why we add little touches of joy
+                        everywhere.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="team py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Meet Our Buddies 👋</h2>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="team-card text-center">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReDTluaakEEQQ2MPAKtHgPGC6e8aDaiEpWHznSJfla0A&s"
+                        alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
+                    <h5>John Doe</h5>
+                    <p class="text-muted">Founder & CEO</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="team-card text-center">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ5CnD_JF_YA0knHZ-nqVghJ9qNOuzUb0YXA&s"
+                        alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
+                    <h5>Jane Smith</h5>
+                    <p class="text-muted">Head of Products</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="team-card text-center">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJoQNlJOt_DtR7uFbKnzZTeS7MCy1NQ1DChA&s"
+                        alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
+                    <h5>Mike Johnson</h5>
+                    <p class="text-muted">Customer Happiness</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="team-card text-center">
+                    <img src="https://imgcdn.stablediffusionweb.com/2025/1/21/0358cfe8-b9a3-4a1b-8223-40c5616109ba.jpg"
+                        alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
+                    <h5>Sarah Wilson</h5>
+                    <p class="text-muted">Marketing Buddy</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
